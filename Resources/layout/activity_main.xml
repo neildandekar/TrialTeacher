@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:minWidth="25px"
     android:minHeight="25px">
-    <TextView
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
+        android:id="@+id/webView1"
         />
     <Button
+        android:text="Got it !"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonOk"
-        android:layout_centerInParent="true"
+        android:layout_centerInParent="true"        
         />
-</RelativeLayout>
+</LinearLayout>

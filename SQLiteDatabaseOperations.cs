@@ -10,24 +10,7 @@ namespace BitmapToSqlite
     {
         public SQLiteDatabaseOperations()
         {
-            try
-            {
-                string cs = @"URI=file:d:\hottots.db";
-                SQLiteConnection conn = new SQLiteConnection(cs);
-                string sqlQuery = "SELECT * FROM thsNames";
-                SQLiteCommand cmd = new SQLiteCommand(sqlQuery, conn);                                
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                List<String> records = new List<String>();
-                 while (reader.Read())
-                {
-                    records.Add(reader.GetInt32(0).ToString() + "-" + reader.GetString(1));
-                }
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
         }
         public int SaveImageRecord(byte[] ba, string name)
         {
