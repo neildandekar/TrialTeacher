@@ -3,11 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Data;
+using Android.App;
+using Android.Database.Sqlite;
+using Android.Database;
 
-namespace BitmapToSqlite
+namespace TrialTeacher
+
 {
     class SQLiteDatabaseOperations
     {
+        DBHelper db = new DBHelper(Application.Context);
+        SQLiteDatabase sqliteDB; 
         public SQLiteDatabaseOperations()
         {
 
@@ -53,24 +59,23 @@ namespace BitmapToSqlite
         }
         public byte[] getImage(string key)
         {
+            sqliteDB = db.WritableDatabase;
+            byte[] imageArray = new byte[25000];
             try
             {
-                string cs = @"URI=file:d:\hottots.db";
-                SQLiteConnection conn = new SQLiteConnection(cs);
-                conn.Open();
-                string sqlQuery = "SELECT image FROM Images where name = @n";
-                SQLiteCommand cmd = new SQLiteCommand(sqlQuery, conn);
-                cmd.Parameters.AddWithValue("@n", key);
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                List<byte[]> records = new List<byte[]>();
-                while (reader.Read())
+                ICursor selectData = sqliteDB.RawQuery("SELECT image FROM Images where name = 'कमल' ", new string[] { });
+                if (selectData.Count > 0)
                 {
-                    byte[] imageArray = new byte[25000]; 
-                    reader.GetBytes(0,0,imageArray,0,25000);
-                    records.Add(imageArray);
-                    
+                    selectData.MoveToFirst();
+                    do
+                    {
+                        
+                        imageArray = selectData.GetBlob(0);
+                    }
+                    while (selectData.MoveToNext());
+                    selectData.Close();
                 }
-                return records[0];
+                return imageArray;
 
             }
             catch (Exception e)

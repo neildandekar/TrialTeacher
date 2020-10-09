@@ -11,6 +11,14 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="157.0dp"
-        android:id="@+id/listView1"
-        ItemsSource="{Binding words}" />
+        android:clickable="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"        
+        android:id="@+id/listView1"      
+         />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Image"
+        android:id="@+id/imageView1"  
+        />
 </LinearLayout>

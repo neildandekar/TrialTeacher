@@ -7,12 +7,16 @@ using Android.Content.Res;
 using System.IO;
 using System;
 using Android.Webkit;
+using Android.Database.Sqlite;
 
 namespace TrialTeacher
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+
+        DBHelper db;
+        SQLiteDatabase sqliteDB;
         private Button buttonOk;
         private WebView webView1;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -43,43 +47,6 @@ namespace TrialTeacher
         }
         public void convert()
         {
-            string content;
-            AssetManager assets = this.Assets;
-            using (StreamReader sr = new StreamReader(assets.Open("DBCOPY.txt")))
-            {
-                content = sr.ReadToEnd();
-            }
-            var sqliteFilename = "hottots.db";
-            string documentsDirectoryPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            var path = Path.Combine(documentsDirectoryPath, sqliteFilename);
-
-            // This is where we copy in our pre-created database
-            if (!File.Exists(path) || content.Equals("FORCE"))
-            {
-                try
-                {
-                    AssetManager asset = this.Assets;
-                    using (var binaryReader = new BinaryReader(asset.Open(sqliteFilename)))
-                    {
-                        using (var binaryWriter = new BinaryWriter(new FileStream(path, FileMode.Create)))
-                        {
-                            byte[] buffer = new byte[2048];
-                            int length = 0;
-                            while ((length = binaryReader.Read(buffer, 0, buffer.Length)) > 0)
-                            {
-                                binaryWriter.Write(buffer, 0, length);
-                            }
-                        }
-                        Toast.MakeText(Application.Context, "Converted DB", ToastLength.Short).Show();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Toast.MakeText(Application.Context, "Could not convert the db", ToastLength.Short).Show();
-                    return;
-                }
-            }
-            return;
         }
     }
 }
