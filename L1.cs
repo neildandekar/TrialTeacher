@@ -14,7 +14,7 @@ using File = System.IO.File;
 
 namespace TrialTeacher 
 {
-    [Activity(Label = "L1")]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme")]
     public class L1 : Activity
     { 
         private IList <string> words { get; set; }
@@ -23,6 +23,7 @@ namespace TrialTeacher
         private ImageView iv1;
         private Button buttonPlay;
         private MediaPlayer mediaPlayer;
+        private string key;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -30,17 +31,15 @@ namespace TrialTeacher
             lv1 = FindViewById<ListView>(Resource.Id.listView1);
             iv1 = FindViewById<ImageView>(Resource.Id.imageView1); //iv and lv are confusing to be changed later.
             buttonPlay = FindViewById<Button>(Resource.Id.buttonPlay);
-            words = new List<string>();
-            words.Add("कमल");
-            words.Add("विमल");
-            words.Add("धवल");
+            SQLiteDatabaseOperations sdb = new SQLiteDatabaseOperations();
+            words = sdb.getNames();
             ArrayAdapter adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, words);
           
             lv1.Adapter = adapter;
             lv1.ItemClick += delegate (object sender, AdapterView.ItemClickEventArgs args)
             {
                 //Hardcoded for now for demo. Whatever be the selection it will always show kamal
-                string temp = ((TextView)args.View).Text;
+                key = ((TextView)args.View).Text;
                 if (lv1.SelectedItem != null) lv1.GetChildAt(args.Position).SetBackgroundColor(Android.Graphics.Color.White);
                 getImage();
                 getSound();
@@ -54,16 +53,16 @@ namespace TrialTeacher
         private void getImage()
         {
             SQLiteDatabaseOperations sdb = new SQLiteDatabaseOperations();
-            byte[] img_arr1 = sdb.getImage("कमल");
+            byte[] img_arr1 = sdb.getImage(key);
             Android.Graphics.Bitmap bitmap = BitmapFactory.DecodeByteArray(img_arr1, 0, img_arr1.Length);
             iv1.SetImageBitmap(bitmap);
         }
         private void getSound()
         {
             SQLiteDatabaseOperations sdb = new SQLiteDatabaseOperations();
-            snd_arr1 = sdb.getSound("कमल");
+            snd_arr1 = sdb.getSound(key);
             int i = 10;
-             string cd = Application.CacheDir.Path + "/" + "temp.mp3";
+            string cd = Application.CacheDir.Path + "/" + "temp.mp3";
             try
             {
                 BinaryWriter w = new BinaryWriter(File.OpenWrite(@cd));

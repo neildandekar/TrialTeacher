@@ -6,6 +6,7 @@ using System.Data;
 using Android.App;
 using Android.Database.Sqlite;
 using Android.Database;
+using System.Text;
 
 namespace TrialTeacher
 
@@ -24,7 +25,12 @@ namespace TrialTeacher
             byte[] imageArray = new byte[25000];
             try
             {
-                ICursor selectData = sqliteDB.RawQuery("SELECT image FROM Images where name = 'कमल' ", new string[] { });
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT image FROM Images where trim(name) = ");
+                sb.Append("'");
+                sb.Append(key);
+                sb.Append("' ");
+                ICursor selectData = sqliteDB.RawQuery(sb.ToString(), null);
                 if (selectData.Count > 0)
                 {
                     selectData.MoveToFirst();
@@ -51,7 +57,12 @@ namespace TrialTeacher
             byte[] soundArray = new byte[25000];
             try
             {
-                ICursor selectData = sqliteDB.RawQuery("SELECT sound FROM sounds where name = 'कमल' ", new string[] { });
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT sound FROM sounds where trim(name) = ");
+                sb.Append(" '");
+                sb.Append(key);
+                sb.Append("' ");
+                ICursor selectData = sqliteDB.RawQuery(sb.ToString(), null);
                 if (selectData.Count > 0)
                 {
                     selectData.MoveToFirst();
@@ -64,6 +75,34 @@ namespace TrialTeacher
                     selectData.Close();
                 }
                 return soundArray;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+        }
+        public List<string> getNames()
+        {
+            sqliteDB = db.WritableDatabase;
+            List<string> names = new List<string>();
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT name FROM sounds");
+                ICursor selectData = sqliteDB.RawQuery(sb.ToString(), null);
+                if (selectData.Count > 0)
+                {
+                    selectData.MoveToFirst();
+                    do
+                    {
+
+                        names.Add(selectData.GetString(0));
+                    }
+                    while (selectData.MoveToNext());
+                    selectData.Close();
+                }
+                return names;
             }
             catch (Exception e)
             {
