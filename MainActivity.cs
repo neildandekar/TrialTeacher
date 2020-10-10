@@ -15,8 +15,6 @@ namespace TrialTeacher
     public class MainActivity : AppCompatActivity
     {
 
-        DBHelper db;
-        SQLiteDatabase sqliteDB;
         private Button buttonOk;
         private WebView webView1;
         protected override void OnCreate(Bundle savedInstanceState)
